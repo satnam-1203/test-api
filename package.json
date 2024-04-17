@@ -1,0 +1,16 @@
+{
+  "name": "express-session-demo",
+  "version": "1.0.0",
+  "description": "A demo application showcasing the use of sessions and cookies in Express.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": ["express", "session", "cookies"],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "express-session": "^1.17.3"
+  }
+}
