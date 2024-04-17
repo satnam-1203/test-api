@@ -4,7 +4,7 @@
   "description": "A demo application showcasing the use of sessions and cookies in Express.",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "keywords": ["express", "session", "cookies"],
   "author": "Your Name",
