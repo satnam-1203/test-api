@@ -8,7 +8,7 @@ const PORT = 3000;
 // Configure CORS middleware
 // Customize the origin based on your app's origin
 app.use(cors({
-    origin: 'http://localhost:3000', // Replace with the origin of your React app
+    origin: 'https://cookie-testing.netlify.app', // Replace with the origin of your React app
     credentials: true, // Allow sending of cookies and session data
 }));
 
