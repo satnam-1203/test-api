@@ -27,17 +27,17 @@ app.use((req, res, next) => {
 });
 
 // Configure the session middleware
-app.use(session({
-    secret: 'your_secret_key', // Use a secret key to sign the session ID cookie
-    resave: false, // Prevents resaving the session if it hasn't changed
-    saveUninitialized: false, // Prevents saving uninitialized sessions
-    cookie: {
-        maxAge: 1000 * 60 * 10, // Session will expire after 10 minutes of inactivity
-        secure: false, // Set to true if using HTTPS
-        httpOnly: true, // Only allow the cookie to be accessed by the server
-        sameSite: 'strict' // Control the inclusion of cookies in cross-origin requests
-    },
-}));
+// app.use(session({
+//     secret: 'your_secret_key', // Use a secret key to sign the session ID cookie
+//     resave: false, // Prevents resaving the session if it hasn't changed
+//     saveUninitialized: false, // Prevents saving uninitialized sessions
+//     cookie: {
+//         maxAge: 1000 * 60 * 10, // Session will expire after 10 minutes of inactivity
+//         secure: false, // Set to true if using HTTPS
+//         httpOnly: true, // Only allow the cookie to be accessed by the server
+//         sameSite: 'strict' // Control the inclusion of cookies in cross-origin requests
+//     },
+// }));
 
 // Route to set a session variable and create a cookie
 app.get('/create-cookie', (req, res) => {
