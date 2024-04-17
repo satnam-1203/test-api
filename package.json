@@ -2,7 +2,7 @@
   "name": "express-session-demo",
   "version": "1.0.0",
   "description": "A demo application showcasing the use of sessions and cookies in Express.",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
