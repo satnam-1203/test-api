@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.3",
+    "redis": "^4.6.5",
+    "connect-redis": "^6.0.2",
     "express-session": "^1.17.3",
     "cors": "^2.8.5"
   }
