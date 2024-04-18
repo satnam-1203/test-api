@@ -27,6 +27,7 @@ app.use(session({
     key: 'userId',
     secret: 'your-secret-key', // Use a secure secret key
     resave: false,
+    secure : true,
     saveUninitialized: false,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24, // One day expiration
@@ -52,6 +53,7 @@ app.get('/create-cookie', (req, res) => {
     res.cookie('userCookie', 'userValue', {
         maxAge: 1000 * 60 * 60 * 24, // One day expiration
         httpOnly: true, // Prevent client-side access to the cookie
+        secure : true,
         sameSite: 'None', // Allow cross-origin requests
         path: '/',
     });
