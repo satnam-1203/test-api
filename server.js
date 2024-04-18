@@ -1,15 +1,10 @@
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
-const RedisStore = require('connect-redis')(session);
-const redis = require('redis');
 
 // Create an Express app
 const app = express();
 const PORT = 3000;
-
-// Create a Redis client
-const redisClient = redis.createClient();
 
 // Configure CORS middleware
 app.use(cors({
@@ -20,50 +15,52 @@ app.use(cors({
         'Authorization',
         'Accept',
         'X-Requested-With',
-        'X-API-Key',
-        'X-HTTP-Method-Override',
-        'Access-Control-Allow-Origin',
-        'Access-Control-Allow-Methods',
-        'Access-Control-Allow-Credentials',
         'Cookie',
     ],
     exposedHeaders: ["Set-Cookie"],
     credentials: true,
-    optionsSuccessStatus: 200, // Ensure successful response for OPTIONS preflight
+    optionsSuccessStatus: 200,
 }));
 
-// Configure the session middleware using Redis as the session store
+// Configure session middleware
 app.use(session({
-    store: new RedisStore({ client: redisClient }),
-    key: "userId",
-    secret: "komedi",
+    key: 'userId',
+    secret: 'your-secret-key', // Use a secure secret key
     resave: false,
     saveUninitialized: false,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24, // One day expiration
-        secure: true, // Only send cookies over HTTPS
         httpOnly: true, // Prevent client-side access to the cookie
         sameSite: 'None', // Allow cross-origin requests
-        path: "/", // Cookie is valid for the entire site
+        path: '/',
     },
 }));
 
-// Route to create a session variable and set a cookie
+// Route to automatically create a user and set a cookie
 app.get('/create-cookie', (req, res) => {
-    req.session.userId = 1; // Example user ID
-    req.session.userName = 'Alice'; // Example user name
+    // Automatically create a user (hardcoded example user)
+    const user = {
+        id: 1, // Example user ID
+        name: 'Alice', // Example user name
+    };
 
+    // Set session data for the created user
+    req.session.userId = user.id;
+    req.session.userName = user.name;
+
+    // Set a cookie in the client's browser
     res.cookie('userCookie', 'userValue', {
         maxAge: 1000 * 60 * 60 * 24, // One day expiration
-        secure: true, // Only send cookies over HTTPS
         httpOnly: true, // Prevent client-side access to the cookie
         sameSite: 'None', // Allow cross-origin requests
-        path: '/', // Cookie is valid for the entire site
+        path: '/',
     });
 
     // Log session data for troubleshooting
     console.log("Session data set:", req.session);
-    res.send('Cookie created and session data set!');
+
+    // Send a success response to the client
+    res.status(200).json({ message: 'User created and session data set!', userId: user.id, userName: user.name });
 });
 
 // Route to get the session variable and display it
