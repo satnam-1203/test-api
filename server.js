@@ -43,12 +43,21 @@ app.use(session({
 );
 
 // Route to set a session variable and create a cookie
+// Define a route to create a cookie
 app.get('/create-cookie', (req, res) => {
-    req.session.user = {
-        id: 1,
-        name: 'Alice',
-    };
-    res.send('Cookie created and session variable set!');
+    // Use res.cookie() to create a cookie
+    res.cookie('userCookie', 'userValue', {
+        maxAge: 1000 * 60 * 60 * 24, // Cookie expiration time (1 day)
+        secure: true, // Only send cookies over HTTPS
+        httpOnly: true, // Prevent client-side access to the cookie
+        sameSite: 'None', // Allow cross-origin requests
+        path: '/', // Cookie is valid for the entire site
+        // Optionally set domain if applicable
+        // domain: 'your-server-domain.com', 
+    });
+
+    // Send a response indicating the cookie has been created
+    res.send('Cookie created!');
 });
 
 // Route to get the session variable from the cookie
