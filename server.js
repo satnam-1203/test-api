@@ -1,9 +1,15 @@
 const express = require('express');
 const session = require('express-session');
-const cors = require('cors'); // Import the cors package
+const cors = require('cors');
+const RedisStore = require('connect-redis')(session);
+const redis = require('redis');
 
+// Create an Express app
 const app = express();
 const PORT = 3000;
+
+// Create a Redis client
+const redisClient = redis.createClient();
 
 // Configure CORS middleware
 app.use(cors({
@@ -26,22 +32,23 @@ app.use(cors({
     optionsSuccessStatus: 200, // Ensure successful response for OPTIONS preflight
 }));
 
-// Configure the session middleware
+// Configure the session middleware using Redis as the session store
 app.use(session({
+    store: new RedisStore({ client: redisClient }),
     key: "userId",
     secret: "komedi",
     resave: false,
     saveUninitialized: false,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24, // One day expiration
-        secure: true, // Only send cookies over HTTPS (Render uses HTTPS)
-        httpOnly: true, // Protect against client-side access to the cookie
-        sameSite: 'None',
-        path: "/",
+        secure: true, // Only send cookies over HTTPS
+        httpOnly: true, // Prevent client-side access to the cookie
+        sameSite: 'None', // Allow cross-origin requests
+        path: "/", // Cookie is valid for the entire site
     },
 }));
 
-// Route to set a session variable and create a cookie
+// Route to create a session variable and set a cookie
 app.get('/create-cookie', (req, res) => {
     req.session.userId = 1; // Example user ID
     req.session.userName = 'Alice'; // Example user name
@@ -59,6 +66,7 @@ app.get('/create-cookie', (req, res) => {
     res.send('Cookie created and session data set!');
 });
 
+// Route to get the session variable and display it
 app.get('/get-cookie', (req, res) => {
     // Log session data for troubleshooting
     console.log("Retrieved session data:", req.session);
@@ -69,7 +77,6 @@ app.get('/get-cookie', (req, res) => {
         res.send('No session data found.');
     }
 });
-
 
 // Start the server
 app.listen(PORT, () => {
