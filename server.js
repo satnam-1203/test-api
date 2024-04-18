@@ -7,7 +7,7 @@ const PORT = 3000;
 
 // Configure CORS middleware
 /app.use(cors({
-    origin: ["https://grcportal.netlify.app"],
+    origin: ["https://cookie-testing.netlify.app"],
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
         'Content-Type',
