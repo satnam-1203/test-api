@@ -33,37 +33,37 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        expires: 1000 * 60 * 60 * 24, // One day expiration
+        maxAge: 1000 * 60 * 60 * 24, // One day expiration
         secure: true, // Only send cookies over HTTPS (Render uses HTTPS)
         httpOnly: true, // Protect against client-side access to the cookie
         sameSite: 'None',
-        path : "/",
+        path: "/",
     },
-})
-);
+}));
 
 // Route to set a session variable and create a cookie
-// Define a route to create a cookie
 app.get('/create-cookie', (req, res) => {
-    // Use res.cookie() to create a cookie
+    // Create the session data
+    req.session.userId = 1; // Example user ID
+    req.session.userName = 'Alice'; // Example user name
+
+    // Create a cookie and set the user ID and name in the session
     res.cookie('userCookie', 'userValue', {
-        maxAge: 1000 * 60 * 60 * 24, // Cookie expiration time (1 day)
+        maxAge: 1000 * 60 * 60 * 24, // One day expiration
         secure: true, // Only send cookies over HTTPS
         httpOnly: true, // Prevent client-side access to the cookie
         sameSite: 'None', // Allow cross-origin requests
         path: '/', // Cookie is valid for the entire site
-        // Optionally set domain if applicable
-        // domain: 'your-server-domain.com', 
     });
 
-    // Send a response indicating the cookie has been created
-    res.send('Cookie created!');
+    // Send a response indicating the cookie has been created and session data set
+    res.send('Cookie created and session data set!');
 });
 
 // Route to get the session variable from the cookie
 app.get('/get-cookie', (req, res) => {
-    if (req.session.user) {
-        res.send(`User: ${req.session.user.name}`);
+    if (req.session.userId && req.session.userName) {
+        res.send(`User ID: ${req.session.userId}, User Name: ${req.session.userName}`);
     } else {
         res.send('No session data found.');
     }
