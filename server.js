@@ -43,11 +43,9 @@ app.use(session({
 
 // Route to set a session variable and create a cookie
 app.get('/create-cookie', (req, res) => {
-    // Create the session data
     req.session.userId = 1; // Example user ID
     req.session.userName = 'Alice'; // Example user name
 
-    // Create a cookie and set the user ID and name in the session
     res.cookie('userCookie', 'userValue', {
         maxAge: 1000 * 60 * 60 * 24, // One day expiration
         secure: true, // Only send cookies over HTTPS
@@ -56,18 +54,22 @@ app.get('/create-cookie', (req, res) => {
         path: '/', // Cookie is valid for the entire site
     });
 
-    // Send a response indicating the cookie has been created and session data set
+    // Log session data for troubleshooting
+    console.log("Session data set:", req.session);
     res.send('Cookie created and session data set!');
 });
 
-// Route to get the session variable from the cookie
 app.get('/get-cookie', (req, res) => {
+    // Log session data for troubleshooting
+    console.log("Retrieved session data:", req.session);
+    
     if (req.session.userId && req.session.userName) {
         res.send(`User ID: ${req.session.userId}, User Name: ${req.session.userName}`);
     } else {
         res.send('No session data found.');
     }
 });
+
 
 // Start the server
 app.listen(PORT, () => {
