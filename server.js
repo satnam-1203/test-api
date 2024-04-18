@@ -6,7 +6,7 @@ const app = express();
 const PORT = 3000;
 
 // Configure CORS middleware
-/app.use(cors({
+app.use(cors({
     origin: ["https://cookie-testing.netlify.app"],
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
