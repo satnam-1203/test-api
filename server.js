@@ -6,38 +6,41 @@ const app = express();
 const PORT = 3000;
 
 // Configure CORS middleware
-// Customize the origin based on your app's origin
-app.use(cors({
-    origin: 'https://cookie-testing.netlify.app', // Replace with the origin of your React app
-    credentials: true, // Allow sending of cookies and session data
+/app.use(cors({
+    origin: ["https://grcportal.netlify.app"],
+    methods: ["GET", "POST", "DELETE", "PUT"],
+    allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'Accept',
+        'X-Requested-With',
+        'X-API-Key',
+        'X-HTTP-Method-Override',
+        'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Methods',
+        'Access-Control-Allow-Credentials',
+        'Cookie',
+    ],
+    exposedHeaders: ["Set-Cookie"],
+    credentials: true,
+    optionsSuccessStatus: 200, // Ensure successful response for OPTIONS preflight
 }));
 
-// Configure headers middleware
-// Apply global headers to all routes
-app.use((req, res, next) => {
-    // Add custom headers
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', 'https://cookie-testing.netlify.app'); // Customize the origin
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    
-    // Continue to the next middleware or route handler
-    next();
-});
-
 // Configure the session middleware
-// app.use(session({
-//     secret: 'your_secret_key', // Use a secret key to sign the session ID cookie
-//     resave: false, // Prevents resaving the session if it hasn't changed
-//     saveUninitialized: false, // Prevents saving uninitialized sessions
-//     cookie: {
-//         maxAge: 1000 * 60 * 10, // Session will expire after 10 minutes of inactivity
-//         secure: false, // Set to true if using HTTPS
-//         httpOnly: true, // Only allow the cookie to be accessed by the server
-//         sameSite: 'strict' // Control the inclusion of cookies in cross-origin requests
-//     },
-// }));
+app.use(session({
+    key: "userId",
+    secret: "komedi",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 1000 * 60 * 60 * 24, // One day expiration
+        secure: true, // Only send cookies over HTTPS (Render uses HTTPS)
+        httpOnly: true, // Protect against client-side access to the cookie
+        sameSite: 'None',
+        path : "/",
+    },
+})
+);
 
 // Route to set a session variable and create a cookie
 app.get('/create-cookie', (req, res) => {
