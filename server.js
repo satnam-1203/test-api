@@ -29,11 +29,11 @@ app.use(cors({
 
 
 app.use(session({
-  secret: 'your_secret_key',
+  secret: 'abc',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // Set to true if your application is served over HTTPS
+    secure: true, // Set to true if your application is served over HTTPS
     httpOnly: true, // Ensures that cookies are only accessible via HTTP(S) requests, not JavaScript
     maxAge: 1000 * 60 * 60 * 24, // Cookie expiration time in milliseconds (e.g., 24 hours)
     sameSite: 'strict' // Protects against CSRF attacks by preventing the cookie from being sent in cross-origin requests
