@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const FileStore = require('session-file-store')(session);
 const cors = require('cors');
 
 const app = express();
@@ -32,6 +33,7 @@ app.use(session({
   secret: 'abc',
   resave: false,
   saveUninitialized: false,
+  store: new FileStore({}),
   cookie: {
     secure: true, // Set to true if your application is served over HTTPS
     httpOnly: true, // Ensures that cookies are only accessible via HTTP(S) requests, not JavaScript
