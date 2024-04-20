@@ -38,7 +38,7 @@ app.use(session({
     secure: true, // Set to true if your application is served over HTTPS
     httpOnly: true, // Ensures that cookies are only accessible via HTTP(S) requests, not JavaScript
     maxAge: 1000 * 60 * 60 * 24, // Cookie expiration time in milliseconds (e.g., 24 hours)
-    sameSite: 'strict' // Protects against CSRF attacks by preventing the cookie from being sent in cross-origin requests
+    sameSite: 'lax' // Protects against CSRF attacks by preventing the cookie from being sent in cross-origin requests
   }
 }));
 
