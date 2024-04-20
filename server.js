@@ -10,8 +10,38 @@ app.use(bodyParser.json());
 app.use(cors({
   origin: 'https://cookie-testing.netlify.app',
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'] // Add any other required headers here
+  allowedHeaders: [
+    'Accept',
+    'Accept-Encoding',
+    'Accept-Language',
+    'Connection',
+    'Content-Length',
+    'Content-Type',
+    'Host',
+    'Origin',
+    'Referer',
+    'User-Agent',
+    'Authorization'
+    // Add any other required headers here
+  ],
+  exposedHeaders: [
+    'Content-Length',
+    'X-Content-Type-Options',
+    'X-Powered-By',
+    'X-Frame-Options',
+    'Content-Security-Policy',
+    'Strict-Transport-Security',
+    'Date',
+    'Connection',
+    'Keep-Alive',
+    'Transfer-Encoding',
+    'Set-Cookie'
+    // Add any other custom headers you want to expose here
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add the HTTP methods you want to allow
 }));
+
+
 app.use(session({
   secret: 'your_secret_key',
   resave: false,
