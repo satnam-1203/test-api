@@ -24,7 +24,6 @@ app.use(cors({
     exposedHeaders: ["Set-Cookie"],
     credentials: true,
     optionsSuccessStatus: 200, // Ensure successful response for OPTIONS preflight
-  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add the HTTP methods you want to allow
 }));
 
