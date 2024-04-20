@@ -34,6 +34,7 @@ app.post('/login', (req, res) => {
   const user = users.find(u => u.username === username && u.password === password);
   if (user) {
     req.session.user = user;
+    console.log(req.session.user);
     res.json({ success: true, message: 'Login successful' });
     console.log("ok");
   } else {
