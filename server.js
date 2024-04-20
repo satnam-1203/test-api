@@ -54,7 +54,7 @@ app.use(session({
 
 // Dummy user data (replace with real database)
 const users = [
-  { id: 1, username: 'user1', password: 'password1' },
+  { id: 1, username: 'user', password: '123' },
   { id: 2, username: 'user2', password: 'password2' },
 ];
 
