@@ -35,6 +35,7 @@ app.post('/login', (req, res) => {
   if (user) {
     req.session.user = user;
     res.json({ success: true, message: 'Login successful' });
+    console.log("ok");
   } else {
     res.status(401).json({ success: false, message: 'Invalid username or password' });
   }
