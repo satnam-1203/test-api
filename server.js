@@ -1,83 +1,68 @@
 const express = require('express');
 const session = require('express-session');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 
-// Create an Express app
 const app = express();
-const PORT = 3000;
 
-// Configure CORS middleware
+// Middleware
+app.use(bodyParser.json());
 app.use(cors({
-    origin: ["https://cookie-testing.netlify.app"],
-    methods: ["GET", "POST", "DELETE", "PUT"],
-    allowedHeaders: [
-        'Content-Type',
-        'Authorization',
-        'Accept',
-        'X-Requested-With',
-        'Cookie',
-    ],
-    exposedHeaders: ["Set-Cookie"],
-    credentials: true,
-    optionsSuccessStatus: 200,
+  origin: 'https://cookie-testing.netlify.app',
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'] // Add any other required headers here
 }));
-
-// Configure session middleware
 app.use(session({
-    key: 'userId',
-    secret: 'your-secret-key', // Use a secure secret key
-    resave: false,
-    secure : true,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 1000 * 60 * 60 * 24, // One day expiration
-        httpOnly: true, // Prevent client-side access to the cookie
-        sameSite: 'None', // Allow cross-origin requests
-        path: '/',
-    },
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 24
+  }
 }));
 
-// Route to automatically create a user and set a cookie
-app.get('/create-cookie', (req, res) => {
-    // Automatically create a user (hardcoded example user)
-    const user = {
-        id: 1, // Example user ID
-        name: 'Alice', // Example user name
-    };
+// Dummy user data (replace with real database)
+const users = [
+  { id: 1, username: 'user1', password: 'password1' },
+  { id: 2, username: 'user2', password: 'password2' },
+];
 
-    // Set session data for the created user
-    req.session.userId = user.id;
-    req.session.userName = user.name;
-
-    // Set a cookie in the client's browser
-    res.cookie('userCookie', 'userValue', {
-        maxAge: 1000 * 60 * 60 * 24, // One day expiration
-        httpOnly: true, // Prevent client-side access to the cookie
-        secure : true,
-        sameSite: 'None', // Allow cross-origin requests
-        path: '/',
-    });
-
-    // Log session data for troubleshooting
-    console.log("Session data set:", req.session);
-
-    // Send a success response to the client
-    res.status(200).json({ message: 'User created and session data set!', userId: user.id, userName: user.name });
+// Login route
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find(u => u.username === username && u.password === password);
+  if (user) {
+    req.session.user = user;
+    res.json({ success: true, message: 'Login successful' });
+  } else {
+    res.status(401).json({ success: false, message: 'Invalid username or password' });
+  }
 });
 
-// Route to get the session variable and display it
-app.get('/get-cookie', (req, res) => {
-    // Log session data for troubleshooting
-    console.log("Retrieved session data:", req.session);
-    
-    if (req.session.userId && req.session.userName) {
-        res.send(`User ID: ${req.session.userId}, User Name: ${req.session.userName}`);
+// Logout route
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      res.status(500).json({ success: false, message: 'Failed to logout' });
     } else {
-        res.send('No session data found.');
+      res.clearCookie('connect.sid', { path: '/' });
+      res.json({ success: true, message: 'Logout successful' });
     }
+  });
 });
 
-// Start the server
+// Profile route (protected)
+app.get('/profile', (req, res) => {
+  if (req.session.user) {
+    res.json({ success: true, user: req.session.user });
+  } else {
+    res.status(401).json({ success: false, message: 'Unauthorized' });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
