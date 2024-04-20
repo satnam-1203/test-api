@@ -9,34 +9,21 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors({
   origin: 'https://cookie-testing.netlify.app',
-  credentials: true,
-  allowedHeaders: [
-    'Accept',
-    'Accept-Encoding',
-    'Accept-Language',
-    'Connection',
-    'Content-Length',
-    'Content-Type',
-    'Host',
-    'Origin',
-    'Referer',
-    'User-Agent',
-    'Authorization'
-    // Add any other required headers here
-  ],
-  exposedHeaders: [
-    'Content-Length',
-    'X-Content-Type-Options',
-    'X-Powered-By',
-    'X-Frame-Options',
-    'Content-Security-Policy',
-    'Strict-Transport-Security',
-    'Date',
-    'Connection',
-    'Keep-Alive',
-    'Transfer-Encoding',
-    'Set-Cookie'
-    // Add any other custom headers you want to expose here
+    allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'Accept',
+        'X-Requested-With',
+        'X-API-Key',
+        'X-HTTP-Method-Override',
+        'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Methods',
+        'Access-Control-Allow-Credentials',
+        'Cookie',
+    ],
+    exposedHeaders: ["Set-Cookie"],
+    credentials: true,
+    optionsSuccessStatus: 200, // Ensure successful response for OPTIONS preflight
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add the HTTP methods you want to allow
 }));
